@@ -1,4 +1,4 @@
-= Telegram 2 Google CSV
+# Telegram 2 Google CSV
 
 Script to transform contacts list export from Telegram Messenger (json)
 to CSV file accepted by Google Contacts.
