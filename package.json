@@ -1,0 +1,25 @@
+{
+  "name": "telegram2googlecsv",
+  "version": "1.0.0",
+  "description": "Script to transform contacts list export from Telegram Messenger (json) to CSV file accepted by Google Contacts.",
+  "main": "convert.ts",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Acerbic/telegram2googlecsv.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Acerbic/telegram2googlecsv/issues"
+  },
+  "homepage": "https://github.com/Acerbic/telegram2googlecsv#readme",
+  "devDependencies": {
+    "typescript-deno-plugin": "^1.2.7"
+  }
+}

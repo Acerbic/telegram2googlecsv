@@ -27,7 +27,7 @@ type Contact = {
  * Turn a contact object to a line of CSV file.
  * If called without an argument, returns the string for CSV header line.
  */
-const contactToCSV = function (contact? : Contact) : string {
+function contactToCSV(contact? : Contact) : string {
   if (contact) {
     const c = {
       fn: escapeToCSV(contact.first_name),
@@ -41,7 +41,7 @@ const contactToCSV = function (contact? : Contact) : string {
   }
 };
 
-const escapeToCSV = function (raw: string) : string {
+function escapeToCSV(raw: string) : string {
   if (raw.includes(',') || raw.includes('"')) {
     return '"' + raw.split('"').join('""') + '"';
   } else {
@@ -49,6 +49,11 @@ const escapeToCSV = function (raw: string) : string {
   }
 };
 
-const contacts : Contact[] = (await readJson(inputFileName) as any).contacts.list;
-const csvLines: string[] = [contactToCSV(), ... contacts.map(contactToCSV)];
-await writeFileStr(outputFileName, csvLines.join('\n') + '\n');
+
+// I don't know how to configure neovim coc-tsserver to not complain about 
+// unbound `await`s.
+(async () => {
+  const contacts : Contact[] = (await readJson(inputFileName) as any).contacts.list;
+  const csvLines: string[] = [contactToCSV(), ... contacts.map(contactToCSV)];
+  await writeFileStr(outputFileName, csvLines.join('\n') + '\n');
+})();
