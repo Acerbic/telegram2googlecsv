@@ -1,0 +1,22 @@
+{
+ "about": "Here is the data you requested. Remember: Telegram is ad free, it doesn't use your data for ad targeting and doesn't sell it to others. Telegram only keeps the information it needs to function as a secure and feature-rich cloud service.\n\nCheck out Settings > Privacy & Security on Telegram's mobile apps for the relevant settings.",
+ "contacts": {
+  "about": "If you allow access, your contacts are continuously synced with Telegram. Thanks to this, you can easily switch to Telegram and immediately connect with friends across all your devices. We use data about your contacts to let you know when they join Telegram, and to display them by the name you set for them in your phone.\n\nYou can disable contact syncing or delete your stored contacts in Settings > Privacy & Security on Telegram's mobile apps.",
+  "list": [
+   {
+    "user_id": 0,
+    "first_name": "Name0",
+    "last_name": "Name1",
+    "phone_number": "+78001234567",
+    "date": "2017-01-01T12:13:14"
+   },
+   {
+    "user_id": 0,
+    "first_name": "Sp\"ecia,,\"",
+    "last_name": "Цыриллик",
+    "phone_number": "+88001111111",
+    "date": "2000-09-10T01:02:03"
+   }
+  ]
+ }
+}
