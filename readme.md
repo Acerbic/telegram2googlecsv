@@ -20,5 +20,12 @@ a file you want your results in (WILL BE OVERWRITTEN).
 ## Test
 
 ```bash
-deno tests/basic_suite.ts
+deno test --allow-write --allow-read=./tests --allow-run
 ```
+
+## "Other" files
+
+Only `convert.ts` is the relevant project file, the rest (`package.json`, etc.) aren't 
+needed to run this script and are only needed to make my dev environment be cool with
+deno's novel TypeScript.
+

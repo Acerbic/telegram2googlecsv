@@ -9,7 +9,7 @@
  * where `telegram.json` is your existing file from Telegram and `google.csv` is 
  * a file you want your results in (WILL BE OVERWRITTEN).
  */
-import { readJson, writeFileStr } from "https://deno.land/std@v0.33.0/fs/mod.ts";
+import { readJson, writeFileStr } from "https://deno.land/std@v0.34.0/fs/mod.ts";
 
 const inputFileName = Deno.args[0];
 const outputFileName = Deno.args[1];
@@ -30,12 +30,12 @@ type Contact = {
 function contactToCSV(contact? : Contact) : string {
   if (contact) {
     const c = {
-      fn: escapeToCSV(contact.first_name),
+      fn: escapeToCSV(contact.first_name + ' ' + contact.last_name),
+      gn: escapeToCSV(contact.first_name),
       ln: escapeToCSV(contact.last_name),
       p: escapeToCSV(contact.phone_number)
     };
-    const fullName = `${c.fn} ${c.ln}`;
-    return `${fullName},${c.fn},${c.ln},* myContacts,Mobile,${c.p}`;
+    return `${c.fn},${c.gn},${c.ln},* myContacts,Mobile,${c.p}`;
   } else {
     return "Name,Given Name,Family Name,Group Membership,Phone 1 - Type,Phone 1 - Value";
   }

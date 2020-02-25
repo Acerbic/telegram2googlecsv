@@ -248,7 +248,7 @@ declare namespace Deno {
   /** UNSTABLE: might move to Deno.symbols */
   export const EOF: unique symbol;
 
-  /** UNSTABLE: might move to Deno.symbols */
+  /** UNSTABLE: might move to Deno.symbols  */
   export type EOF = typeof EOF;
 
   /** UNSTABLE: maybe remove "SEEK_" prefix. Maybe capitalization wrong. */
@@ -680,9 +680,9 @@ declare namespace Deno {
     mode?: number
   ): Promise<void>;
 
-  // @url js/make_temp_dir.d.ts
+  // @url js/make_temp.d.ts
 
-  export interface MakeTempDirOptions {
+  export interface MakeTempOptions {
     dir?: string;
     prefix?: string;
     suffix?: string;
@@ -696,7 +696,7 @@ declare namespace Deno {
    * Requires allow-write.
    */
   // TODO(ry) Doesn't check permissions.
-  export function makeTempDirSync(options?: MakeTempDirOptions): string;
+  export function makeTempDirSync(options?: MakeTempOptions): string;
 
   /** makeTempDir creates a new temporary directory in the directory `dir`, its
    * name beginning with `prefix` and ending with `suffix`.
@@ -712,7 +712,27 @@ declare namespace Deno {
    * Requires allow-write.
    */
   // TODO(ry) Doesn't check permissions.
-  export function makeTempDir(options?: MakeTempDirOptions): Promise<string>;
+  export function makeTempDir(options?: MakeTempOptions): Promise<string>;
+
+  /** makeTempFileSync is the synchronous version of `makeTempFile`.
+   *
+   *       const tempFileName0 = Deno.makeTempFileSync();
+   *       const tempFileName1 = Deno.makeTempFileSync({ prefix: 'my_temp' });
+   */
+  export function makeTempFileSync(options?: MakeTempOptions): string;
+
+  /** makeTempFile creates a new temporary file in the directory `dir`, its
+   * name beginning with `prefix` and ending with `suffix`.
+   * It returns the full path to the newly created file.
+   * If `dir` is unspecified, tempFile uses the default directory for temporary
+   * files. Multiple programs calling tempFile simultaneously will not choose the
+   * same directory. It is the caller's responsibility to remove the file
+   * when no longer needed.
+   *
+   *       const tempFileName0 = await Deno.makeTempFile();
+   *       const tempFileName1 = await Deno.makeTempFile({ prefix: 'my_temp' });
+   */
+  export function makeTempFile(options?: MakeTempOptions): Promise<string>;
 
   /** Changes the permission of a specific file/directory of specified path
    * synchronously.
@@ -1897,6 +1917,10 @@ declare namespace Deno {
      * Does not apply to `"esnext"` target. */
     useDefineForClassFields?: boolean;
 
+    /** List of library files to be included in the compilation.  If omitted,
+     * then the Deno main runtime libs are used. */
+    lib?: string[];
+
     /** The locale to use to show error messages. */
     locale?: string;
 
@@ -2263,7 +2287,10 @@ declare namespace Deno {
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-interface, @typescript-eslint/no-explicit-any */
 
 /// <reference no-default-lib="true" />
-/// <reference lib="deno_ns" />
+// TODO: we need to remove this, but Fetch::Response::Body implements Reader
+// which requires Deno.EOF, and we shouldn't be leaking that, but https_proxy
+// at the least requires the Reader interface on Body, which it shouldn't
+/// <reference lib="deno.ns" />
 /// <reference lib="esnext" />
 
 // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope
@@ -3621,8 +3648,8 @@ declare namespace __performanceUtil {
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-interface, @typescript-eslint/no-explicit-any */
 
 /// <reference no-default-lib="true" />
-/// <reference lib="deno_ns" />
-/// <reference lib="deno_shared_globals" />
+/// <reference lib="deno.ns" />
+/// <reference lib="deno.shared_globals" />
 /// <reference lib="esnext" />
 
 declare interface Window extends WindowOrWorkerGlobalScope {
