@@ -11,9 +11,6 @@
  */
 import { readJson, writeFileStr } from "https://deno.land/std@v0.34.0/fs/mod.ts";
 
-const inputFileName = Deno.args[0];
-const outputFileName = Deno.args[1];
-
 type Contact = {
   user_id: number,
   first_name: string,
@@ -49,11 +46,38 @@ function escapeToCSV(raw: string) : string {
   }
 };
 
+function usage() : string {
+  return "";
+}
+
+/**
+ * Read input data from file or stdin, if no command line args
+ */
+async function getInputJson() : Promise<unknown> {
+  if (Deno.args.length > 0) {
+    return readJson(Deno.args[0]);
+  } else {
+    return JSON.parse(
+      new TextDecoder().decode(await Deno.readAll(Deno.stdin))
+    );
+  }
+}
+
+/**
+ * Write resulting CSV to a file, if command line arg provided, or stdout
+ */
+async function writeOutputCSV(results: string) : Promise<void> {
+  if (Deno.args.length > 1) {
+    return writeFileStr(Deno.args[1], results);
+  } else {
+    console.log(results);
+  }
+}
 
 // I don't know how to configure neovim coc-tsserver to not complain about 
 // unbound `await`s.
 (async () => {
-  const contacts : Contact[] = (await readJson(inputFileName) as any).contacts.list;
+  const contacts : Contact[] = (await getInputJson() as any).contacts.list;
   const csvLines: string[] = [contactToCSV(), ... contacts.map(contactToCSV)];
-  await writeFileStr(outputFileName, csvLines.join('\n') + '\n');
+  await writeOutputCSV(csvLines.join('\n') + '\n');
 })();
