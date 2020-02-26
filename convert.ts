@@ -2,12 +2,6 @@
  * Script to convert a list of contacts exported from Telegram (Settings -> Advanced -> 
  * Export Telegram data) into a file that could be imported by Google Contacts.
  * Written for deno (see https://deno.land)
- *
- * Usage:
- * > deno --allow-read --allow-write convert.ts telegram.json google.csv
- *
- * where `telegram.json` is your existing file from Telegram and `google.csv` is 
- * a file you want your results in (WILL BE OVERWRITTEN).
  */
 import { readJson, writeFileStr } from "https://deno.land/std@v0.34.0/fs/mod.ts";
 
@@ -47,8 +41,10 @@ function escapeToCSV(raw: string) : string {
 };
 
 function usage() : string {
-  return "";
-}
+  return "A script to convert Telegram Messenger contacts list export file\n" +
+    "to a CSV file for importing into Google Contacts. \n\n" +
+    ">  deno -A convert.ts [inputfile [outputfile]]\n";
+};
 
 /**
  * Read input data from file or stdin, if no command line args
@@ -61,7 +57,7 @@ async function getInputJson() : Promise<unknown> {
       new TextDecoder().decode(await Deno.readAll(Deno.stdin))
     );
   }
-}
+};
 
 /**
  * Write resulting CSV to a file, if command line arg provided, or stdout
@@ -72,11 +68,15 @@ async function writeOutputCSV(results: string) : Promise<void> {
   } else {
     console.log(results);
   }
-}
+};
 
 // I don't know how to configure neovim coc-tsserver to not complain about 
 // unbound `await`s.
 (async () => {
+  if (Deno.args.length > 0 && (Deno.args[0] == '-h' || Deno.args[0] == '--help')) {
+    console.log(usage());
+    Deno.exit(0);
+  }
   const contacts : Contact[] = (await getInputJson() as any).contacts.list;
   const csvLines: string[] = [contactToCSV(), ... contacts.map(contactToCSV)];
   await writeOutputCSV(csvLines.join('\n') + '\n');
